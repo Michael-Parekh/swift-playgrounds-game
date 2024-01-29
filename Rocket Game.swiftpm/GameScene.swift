@@ -32,6 +32,8 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
         rocket.position = CGPoint(x: 300, y: 100)
         rocket.name = "rocket"
         rocket.physicsBody = SKPhysicsBody(rectangleOf: rocketSize)
+        rocket.physicsBody?.mass = 1
+        rocket.physicsBody?.angularDamping = 1.5
         // Add the node to the GameScene. 
         addChild(rocket)
         
@@ -59,12 +61,24 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
         if location.x > 100 + rocket.position.x {
             // If the player is touching 100 pixels to the right of the rocket, then rotate the rocket to the right. 
             rocket.physicsBody?.applyAngularImpulse(-rocketThrustAngularImpulse)
+            // Add orange visual thruster feedback to the rocket if turned right. 
+            let thrusterParticle = SKSpriteNode(color: .orange, size: CGSize(width: 5, height: 5))
+            thrusterParticle.position = rocket.position
+            addChild(thrusterParticle)
         } else if location.x < -100 + rocket.position.x {
             // If the player is touching 100 pixels to the left of the rocket, then rotate the rocket to the left. 
             rocket.physicsBody?.applyAngularImpulse(rocketThrustAngularImpulse)
+            // Add red visual thruster feedback to the rocket if turned left.
+            let thrusterParticle = SKSpriteNode(color: .red, size: CGSize(width: 5, height: 5))
+            thrusterParticle.position = rocket.position
+            addChild(thrusterParticle)
         } else {
             // If the player is touching in between, then move the rocket forward.
             rocket.physicsBody?.applyImpulse(CGVector(dx: dx, dy: dy))
+            // Add blue visual thruster feedback to the rocket if going straight.
+            let thrusterParticle = SKSpriteNode(color: .blue, size: CGSize(width: 5, height: 5))
+            thrusterParticle.position = rocket.position
+            addChild(thrusterParticle)
         }
     }
     
